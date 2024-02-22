@@ -4,12 +4,20 @@
   --white: #f5f6f7;
   --violet: #2d1e69;
   --darkGray: #262626;
+  --magicMint: #a5eebe;
+  --darkButtonBackground: rgb(14, 14, 14);
 }
 
 body {
   min-height: 100vh;
   width: 100%;
+  box-sizing: border-box;
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+}
+
+* {
+  padding: 0;
+  margin: 0;
 }
