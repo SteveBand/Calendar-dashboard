@@ -1,0 +1,20 @@
+.control-panel-wrapper {
+  flex: 2.5;
+  color: var(--white);
+  box-sizing: border-box;
+  padding: 0 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  article {
+    width: 100%;
+    background-color: rgb(28, 28, 28);
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 15px;
+  }
+
+  @import "./components/controlPanelHeader.scss";
+  @import "./components/controlPanelCalendar.scss";
+}

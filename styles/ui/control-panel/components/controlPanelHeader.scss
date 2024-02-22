@@ -1,0 +1,62 @@
+article.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: 150ms ease;
+  padding: 15px 10px;
+  cursor: pointer;
+  .user-details {
+    height: min-content;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .user-info {
+      p {
+        font-size: 0.7rem;
+      }
+
+      h6 {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .notifications-button {
+    background-color: var(--darkButtonBackground);
+    padding: 5px 10px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: 100ms;
+    .icon {
+      font-size: 1.5rem;
+      color: var(--white);
+    }
+    .notifications-number {
+      position: absolute;
+      color: black;
+      background-color: var(--purple);
+      padding: 3px 6px;
+      border-radius: 50%;
+      top: -5px;
+      right: -5px;
+    }
+
+    &:hover {
+      scale: 1.06;
+    }
+  }
+
+  &:hover {
+    background-color: rgb(36, 36, 36);
+  }
+}

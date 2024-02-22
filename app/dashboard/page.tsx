@@ -1,4 +1,4 @@
-import { ControlPanel } from "@/components/ui/ControlPanel";
+import { ControlPanel } from "@/components/ui/controlPanel/ControlPanel";
 import { Mainview } from "@/components/ui/dashboard-page/Mainview";
 
 export default function Dashboard() {
