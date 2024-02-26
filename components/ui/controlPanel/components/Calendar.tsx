@@ -12,19 +12,21 @@ export function Calendar() {
 
   const dateObj = useMemo(() => {
     const newDate = new Date(date.year, date.month, 0);
-    const newArr = [];
+    const firstMonthDay = new Date(
+      newDate.getFullYear(),
+      newDate.getMonth() + 1,
+      1
+    ).getDay();
+    const daysInMonth = new Date(date.year, date.month + 1, 0).getDate();
+    const rows = Math.ceil((firstMonthDay + daysInMonth) / 7) * 7;
+    const daysArray = Array.from({ length: rows }).map((_, index) => {
+      const day = index - firstMonthDay + 1;
+      if (day > 0 && day <= daysInMonth) {
+        return day;
+      }
+    });
 
-    for (let y = 1; y <= newDate.getDate(); y++) {
-      newArr.push(y);
-    }
-
-    const month = newDate.toLocaleString("default", { month: "short" });
-    const obj = {
-      name: month,
-      days: [newArr],
-    };
-
-    return obj;
+    return daysArray;
   }, [date]);
 
   const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
@@ -59,11 +61,16 @@ export function Calendar() {
     });
   }
 
+  function onDayClick(index: number, day: number) {
+    setActiveIndex(index);
+    console.log(new Date(date.year, date.month, day + 1).toISOString());
+  }
+
   return (
     <article className="calendar-wrapper">
       <header>
         <h4>
-          {dateObj.name} {date.year}
+          {date.month} {date.year}
         </h4>
         <div>
           <button onClick={handleBackward}>
@@ -80,19 +87,21 @@ export function Calendar() {
         })}
       </div>
       <div className="days">
-        {dateObj.days[0].map((day, index) => {
-          return (
+        {dateObj.map((day, index) => {
+          return typeof day === "number" ? (
             <button
               className={`${
                 date.month === dateNow.getMonth() && day === dateNow.getDate()
                   ? "today"
                   : ""
               } ${activeIndex === index ? "active" : ""}`}
-              key={day}
-              onClick={() => setActiveIndex(index)}
+              key={index}
+              onClick={() => onDayClick(index, day)}
             >
               <p>{day}</p>
             </button>
+          ) : (
+            <button disabled key={index}></button>
           );
         })}
       </div>
