@@ -1,20 +1,26 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import moment from "moment";
-export function Calendar({ date, setDate, activeDay, setActiveDay }: Props) {
-  const dateNow = new Date();
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { setActiveDay } from "@/lib/redux/features/date-slice";
 
-  const { currentYear, currentMonth, currentDay } = {
+export function Calendar() {
+  const [date, setDate] = useState<Date>(new Date());
+  const dateNow = new Date();
+  const activeDay = useAppSelector((state) =>
+    state.dateSlice.activeDay ? new Date(state.dateSlice.activeDay) : null
+  );
+  const dispatch = useAppDispatch();
+
+  const { currentYear, currentMonth } = {
     currentYear: date.getFullYear(),
     currentMonth: date.getMonth(),
-    currentDay: date.getDate(),
   };
 
   const dateObj = useMemo(() => {
     const firstMonthDay = new Date(
       date.getFullYear(),
-      date.getMonth(),
-      1
+      date.getMonth()
     ).getDay();
 
     const daysInMonth = new Date(
@@ -24,11 +30,12 @@ export function Calendar({ date, setDate, activeDay, setActiveDay }: Props) {
     ).getDate();
 
     const rows = Math.ceil((firstMonthDay + daysInMonth) / 7) * 7;
+
     const daysArray = Array.from({ length: rows }).map((_, index) => {
       const day = index - firstMonthDay + 1;
       if (day <= 0) {
         const year = currentMonth === 0 ? currentYear - 1 : currentYear;
-        const month = currentMonth === 0 ? 11 : currentMonth - 1;
+        const month = currentMonth === 0 ? 11 : currentMonth;
         const beforeDate = new Date(year, month, day);
         return beforeDate;
       } else if (day > daysInMonth) {
@@ -71,13 +78,17 @@ export function Calendar({ date, setDate, activeDay, setActiveDay }: Props) {
   }
 
   function onDayClick(index: number, day: Date) {
+    const newDay = new Date(day);
+    newDay.setHours(12, 0, 0, 0);
+    console.log(newDay);
     setDate(day);
-    setActiveDay(day);
+    dispatch(setActiveDay(newDay.getTime()));
   }
 
-  function compareObjects(day: Date, activeDay: Date | undefined | null) {
+  function compareObjects(day: Date, activeDay: Date | null) {
     if (!activeDay) return false;
-    if (day.getTime() === activeDay?.getTime()) {
+    day.setHours(12, 0, 0, 0);
+    if (day.getTime() === activeDay.getTime()) {
       return true;
     } else {
       return false;
@@ -123,10 +134,3 @@ export function Calendar({ date, setDate, activeDay, setActiveDay }: Props) {
     </article>
   );
 }
-
-type Props = {
-  date: Date;
-  setDate: React.Dispatch<SetStateAction<Date>>;
-  activeDay: Date | null;
-  setActiveDay: React.Dispatch<SetStateAction<Date | null>>;
-};

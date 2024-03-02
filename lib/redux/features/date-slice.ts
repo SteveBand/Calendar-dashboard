@@ -1,20 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 type InitialState = {
-  date: Date;
-  activeDay: Date | null;
+  activeDay: number | string | Date | null;
 };
 
 const initialState: InitialState = {
-  date: new Date(),
   activeDay: null,
 };
 
 export const dateSlice = createSlice({
   name: "date",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveDay: (state, action) => {
+      state.activeDay = action.payload;
+    },
+  },
 });
 
-export const {} = dateSlice.actions;
+export const { setActiveDay } = dateSlice.actions;
 export default dateSlice.reducer;
