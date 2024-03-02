@@ -1,3 +1,4 @@
+import { SetStateAction } from "react";
 import { CiCalendar } from "react-icons/ci";
 
 export function ControlPanelHeader() {
@@ -17,3 +18,4 @@ export function ControlPanelHeader() {
     </article>
   );
 }
+

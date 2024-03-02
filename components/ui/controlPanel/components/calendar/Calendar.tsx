@@ -1,10 +1,8 @@
-import { Dispatch, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import moment from "moment";
-export function Calendar() {
+export function Calendar({ date, setDate, activeDay, setActiveDay }: Props) {
   const dateNow = new Date();
-  const [date, setDate] = useState<Date>(new Date());
-  const [activeDay, setActiveDay] = useState<Date | null>();
 
   const { currentYear, currentMonth, currentDay } = {
     currentYear: date.getFullYear(),
@@ -15,7 +13,7 @@ export function Calendar() {
   const dateObj = useMemo(() => {
     const firstMonthDay = new Date(
       date.getFullYear(),
-      date.getMonth() + 1,
+      date.getMonth(),
       1
     ).getDay();
 
@@ -27,7 +25,7 @@ export function Calendar() {
 
     const rows = Math.ceil((firstMonthDay + daysInMonth) / 7) * 7;
     const daysArray = Array.from({ length: rows }).map((_, index) => {
-      const day = index - firstMonthDay + 2;
+      const day = index - firstMonthDay + 1;
       if (day <= 0) {
         const year = currentMonth === 0 ? currentYear - 1 : currentYear;
         const month = currentMonth === 0 ? 11 : currentMonth - 1;
@@ -36,8 +34,8 @@ export function Calendar() {
       } else if (day > daysInMonth) {
         const year = currentMonth === 11 ? currentYear + 1 : currentYear;
         const month = currentMonth === 11 ? 0 : currentMonth + 1;
-        const beforeDate = new Date(year, month, day - daysInMonth);
-        return beforeDate;
+        const afterDate = new Date(year, month, day - daysInMonth);
+        return afterDate;
       } else {
         return new Date(currentYear, currentMonth, day);
       }
@@ -70,7 +68,6 @@ export function Calendar() {
       newDate.setMonth(currentMonth - 1);
     }
     setDate(newDate);
-    console.log(date);
   }
 
   function onDayClick(index: number, day: Date) {
@@ -127,14 +124,9 @@ export function Calendar() {
   );
 }
 
-type DateState = {
-  day: number;
-  month: number;
-  year: number;
-};
-
-type ActiveDay = {
-  day: number | null;
-  month: number | null;
-  year: number | null;
+type Props = {
+  date: Date;
+  setDate: React.Dispatch<SetStateAction<Date>>;
+  activeDay: Date | null;
+  setActiveDay: React.Dispatch<SetStateAction<Date | null>>;
 };

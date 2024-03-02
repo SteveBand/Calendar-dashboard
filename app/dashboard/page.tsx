@@ -1,5 +1,5 @@
 import { ControlPanel } from "@/components/ui/controlPanel/ControlPanel";
-import { Mainview } from "@/components/ui/dashboard-page/Mainview";
+import { Mainview } from "@/components/dashboard-page/Mainview";
 
 export default function Dashboard() {
   return (
