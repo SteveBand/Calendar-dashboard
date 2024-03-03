@@ -1,0 +1,38 @@
+.mainview-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  h2 {
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
+
+  ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    cursor: pointer;
+    li {
+      transition: 200ms;
+    }
+  }
+
+  ul.options {
+    li {
+      &:hover {
+        text-decoration: underline 2px;
+        text-underline-offset: 5px;
+      }
+    }
+  }
+
+  ul.day-option {
+    li {
+      &:hover {
+        scale: 1.1;
+      }
+    }
+  }
+}

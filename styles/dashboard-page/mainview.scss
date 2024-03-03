@@ -1,4 +1,8 @@
 .mainview-wrapper {
   flex: 7;
   background-color: var(--white);
+  padding: 2vh 3vw;
+  box-sizing: border-box;
+  border-radius: 10px;
+  overflow: hidden;
 }

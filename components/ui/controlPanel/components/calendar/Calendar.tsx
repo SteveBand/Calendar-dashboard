@@ -1,15 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import moment from "moment";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { setActiveDay } from "@/lib/redux/features/date-slice";
+import { setActiveDay, setDaysArr } from "@/lib/redux/features/date-slice";
 
 export function Calendar() {
   const [date, setDate] = useState<Date>(new Date());
   const dateNow = new Date();
-  const activeDay = useAppSelector((state) =>
-    state.dateSlice.activeDay ? new Date(state.dateSlice.activeDay) : null
-  );
+  const activeDay = useAppSelector((state) => state.dateSlice.activeDay);
+  const datesArr = useAppSelector((state) => state.dateSlice.daysArr);
   const dispatch = useAppDispatch();
 
   const { currentYear, currentMonth } = {
@@ -78,22 +77,25 @@ export function Calendar() {
   }
 
   function onDayClick(index: number, day: Date) {
-    const newDay = new Date(day);
-    newDay.setHours(12, 0, 0, 0);
-    console.log(newDay);
+    day.setHours(12, 0, 0, 0);
+
     setDate(day);
-    dispatch(setActiveDay(newDay.getTime()));
+    dispatch(setActiveDay(day.getTime()));
   }
 
-  function compareObjects(day: Date, activeDay: Date | null) {
+  function compareObjects(day: Date) {
     if (!activeDay) return false;
     day.setHours(12, 0, 0, 0);
-    if (day.getTime() === activeDay.getTime()) {
+    if (day.getTime() === activeDay) {
       return true;
     } else {
       return false;
     }
   }
+
+  useEffect(() => {
+    dispatch(setDaysArr(activeDay));
+  }, [activeDay]);
 
   return (
     <article className="calendar-wrapper">
@@ -114,7 +116,8 @@ export function Calendar() {
         })}
       </div>
       <div className="days">
-        {dateObj.map((day, index) => {
+        {datesArr.map((el, index) => {
+          const day = new Date(el);
           return (
             <button
               className={`${
@@ -122,7 +125,7 @@ export function Calendar() {
                 day.getMonth() === dateNow.getMonth()
                   ? "today"
                   : ""
-              } ${compareObjects(day, activeDay) ? "active" : ""}`}
+              } ${compareObjects(day) ? "active" : ""}`}
               key={index}
               onClick={() => onDayClick(index, day)}
             >
