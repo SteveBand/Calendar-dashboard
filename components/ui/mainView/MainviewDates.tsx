@@ -1,5 +1,6 @@
 "use client";
-import { useAppSelector } from "@/lib/redux/hooks";
+import { setActiveDay } from "@/lib/redux/features/date-slice";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineCalendarMonth } from "react-icons/md";
@@ -8,8 +9,8 @@ export function MainviewDates() {
   const activeDay = useAppSelector((state) => state.dateSlice.activeDay);
   const datesArr = useAppSelector((state) => state.dateSlice.daysArr);
   const mainViewDatesWidth = useRef<HTMLDivElement | null>(null);
-
   const [newArr, setNewArr] = useState<number[] | Date[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     function updatedArray() {
@@ -25,7 +26,6 @@ export function MainviewDates() {
           currentDateIndex + Math.floor(numberOfDates - 2)
         );
         setNewArr(arr);
-        console.log("renders");
       }
     }
     updatedArray();
@@ -40,7 +40,11 @@ export function MainviewDates() {
       <article className="days-list" ref={mainViewDatesWidth}>
         {newArr.map((el, index) => {
           return (
-            <div key={index} className={`${activeDay === el ? "active" : ""}`}>
+            <div
+              key={index}
+              className={`${activeDay === el ? "active" : ""}`}
+              onClick={() => dispatch(setActiveDay(el))}
+            >
               <p>{moment(el).format("dddd")}</p>
               <p>{moment(el).format("D")}</p>
             </div>

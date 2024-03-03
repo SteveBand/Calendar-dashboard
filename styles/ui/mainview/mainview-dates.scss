@@ -6,6 +6,11 @@
   width: 100%;
   max-width: 100%;
   padding: 20px 0;
+  gap: 20px;
+
+  svg {
+    font-size: 1.5rem;
+  }
 
   .days-list {
     text-align: center;
@@ -17,7 +22,7 @@
       display: flex;
       flex-direction: column;
       gap: 5px;
-      padding: 20px;
+      padding: 30px 20px;
       border-radius: 10px;
       letter-spacing: 0.7px;
       cursor: pointer;
