@@ -16,14 +16,17 @@ export function MainviewDates() {
     function updatedArray() {
       if (mainViewDatesWidth.current) {
         const numberOfDates = Math.floor(
-          mainViewDatesWidth.current.offsetWidth / 118
+          mainViewDatesWidth.current.offsetWidth / 200
         );
         const currentDateIndex = datesArr.findIndex((el) => {
           return el === activeDay;
         });
+        const startIndex =
+          currentDateIndex >= 1 ? currentDateIndex - 1 : currentDateIndex;
+        const endingIndex = currentDateIndex + 3;
         const arr = datesArr.slice(
-          currentDateIndex <= 1 ? currentDateIndex - 1 : currentDateIndex - 2,
-          currentDateIndex + Math.floor(numberOfDates - 2)
+          startIndex,
+          currentDateIndex + Math.floor(numberOfDates)
         );
         setNewArr(arr);
       }

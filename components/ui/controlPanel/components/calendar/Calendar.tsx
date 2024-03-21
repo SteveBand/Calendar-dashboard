@@ -5,9 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { setActiveDay, setDaysArr } from "@/lib/redux/features/date-slice";
 
 export function Calendar() {
-  const [date, setDate] = useState<Date>(new Date());
-  const dateNow = new Date();
   const activeDay = useAppSelector((state) => state.dateSlice.activeDay);
+  const date = new Date(activeDay);
   const datesArr = useAppSelector((state) => state.dateSlice.daysArr);
   const dispatch = useAppDispatch();
 
@@ -15,40 +14,6 @@ export function Calendar() {
     currentYear: date.getFullYear(),
     currentMonth: date.getMonth(),
   };
-
-  const dateObj = useMemo(() => {
-    const firstMonthDay = new Date(
-      date.getFullYear(),
-      date.getMonth()
-    ).getDay();
-
-    const daysInMonth = new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).getDate();
-
-    const rows = Math.ceil((firstMonthDay + daysInMonth) / 7) * 7;
-
-    const daysArray = Array.from({ length: rows }).map((_, index) => {
-      const day = index - firstMonthDay + 1;
-      if (day <= 0) {
-        const year = currentMonth === 0 ? currentYear - 1 : currentYear;
-        const month = currentMonth === 0 ? 11 : currentMonth;
-        const beforeDate = new Date(year, month, day);
-        return beforeDate;
-      } else if (day > daysInMonth) {
-        const year = currentMonth === 11 ? currentYear + 1 : currentYear;
-        const month = currentMonth === 11 ? 0 : currentMonth + 1;
-        const afterDate = new Date(year, month, day - daysInMonth);
-        return afterDate;
-      } else {
-        return new Date(currentYear, currentMonth, day);
-      }
-    });
-
-    return daysArray;
-  }, [date]);
 
   const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
@@ -61,7 +26,7 @@ export function Calendar() {
     } else {
       newDate.setMonth(currentMonth + 1);
     }
-    setDate(newDate);
+    dispatch(setActiveDay(newDate.getTime()));
   }
 
   function handleBackward(e: React.MouseEvent<HTMLButtonElement>) {
@@ -73,13 +38,11 @@ export function Calendar() {
     } else {
       newDate.setMonth(currentMonth - 1);
     }
-    setDate(newDate);
+    dispatch(setActiveDay(newDate.getTime()));
   }
 
   function onDayClick(index: number, day: Date) {
     day.setHours(12, 0, 0, 0);
-
-    setDate(day);
     dispatch(setActiveDay(day.getTime()));
   }
 
@@ -100,7 +63,7 @@ export function Calendar() {
   return (
     <article className="calendar-wrapper">
       <header>
-        <h4>{moment(date).format("MMMM YYYY")}</h4>
+        <h4>{moment(activeDay).format("MMMM YYYY")}</h4>
         <div>
           <button onClick={handleBackward}>
             <FaAngleLeft />
@@ -121,8 +84,8 @@ export function Calendar() {
           return (
             <button
               className={`${
-                day.getDate() === dateNow.getDate() &&
-                day.getMonth() === dateNow.getMonth()
+                day.getDate() === day.getDate() &&
+                day.getMonth() === day.getMonth()
                   ? "today"
                   : ""
               } ${compareObjects(day) ? "active" : ""}`}
